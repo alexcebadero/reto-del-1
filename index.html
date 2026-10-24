@@ -126,8 +126,8 @@
             to { opacity: 1; }
         }
 
-        /* Enlace de Afiliados (Monetización Fase 3) */
-        .affiliate-banner {
+        /* Enlace de Afiliados Corregido (Monetización Fase 3) */
+        .affiliate-btn {
             position: absolute;
             bottom: 5%;
             background: rgba(255, 255, 255, 0.1);
@@ -141,7 +141,7 @@
             transition: all 0.2s;
             text-align: center;
         }
-        .affiliate-banner:active {
+        .affiliate-btn:active {
             background: rgba(255, 255, 255, 0.3);
             color: #fff;
         }
@@ -212,7 +212,7 @@
             background: #ffcc00;
             color: #000;
             box-shadow: 0 0 20px rgba(255, 204, 0, 0.6);
-            display: none; /* Se oculta por defecto */
+            display: none;
             animation: pulse-revive 1.5s infinite alternate;
         }
         @keyframes pulse-revive {
@@ -223,30 +223,7 @@
             background: #ff9900;
         }
 
-        /* Simulador de Anuncio */
-        #adSimulator {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: #000;
-            z-index: 20;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-        }
-        .ad-loader {
-            border: 4px solid #333;
-            border-top: 4px solid #ffcc00;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin-bottom: 20px;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        /* Notificación Toast (Mensaje in-game) */
+        /* Notificación Toast */
         #toast {
             position: absolute;
             top: 20px;
@@ -264,7 +241,6 @@
         .toast-show {
             opacity: 1 !important;
         }
-
     </style>
 </head>
 <body>
@@ -286,28 +262,21 @@
 
     <div id="tapToStart" class="tap-to-start">TOCA PARA EMPEZAR</div>
     
-    <!-- Enlace Afiliado (Phase 3.3) -->
+    <!-- Enlace Afiliado Corregido -->
     <a href="https://www.amazon.es/Powerbank-Intenso-Bater%C3%ADa-Smartphones-Tabletas/dp/B07Z6N28RD?__mk_es_ES=%C3%85M%C3%85%C5%BD%C3%95%C3%91&crid=6O8XQFA0VR4N&dib=eyJ2IjoiMSJ9.XmkNFTPeZE-hGGsGIzUhc_WXmBxA7AwBeY04_6zWcOJN-4uxWvUJGRE2b-DKcdxE21fBM9b4R1amvwRO3_qOLBrbOP1Q7WJZdO4Ac8VvbEZMDEbje-RNIMKpF0LV5uBKqZ0dMs2QoTW2I9H0as-g4t_vyPexnaOE9mrkm8bqs_GYotkX66lSApoghvuP4YR-ucHOXmN2uaa0IWA9U_lxW-vcg3ilRvFkbVbOTGMbN5E1pZpuRDa1eq4RYP61T_F9K36JYv3-hRuivL4zGafMNd85wiOWKSvNe78wAovKHBU.t4yRR-1WUcGS4uud7z7ZUWgWckGg9UoSFO7NqszkPUg&dib_tag=se&keywords=mini+power+bank&qid=1792851415&refinements=p_36%3A-1500&rnid=1323854031&sprefix=mini+power+bank%2Caps%2C242&sr=8-6&linkCode=ll2&tag=elretodel1-21&linkId=cee62e9dd7e3f02c4ac45caa7896ee96&gaOptInStatus=true&ref_=as_li_ss_tl" target="_blank" id="promo-link" class="affiliate-btn">
-    🔋 Batería Infinita
-</a>
+        🔋 Batería Infinita
+    </a>
 
     <div id="gameOverScreen" class="overlay">
         <h1>GAME OVER</h1>
         <p>Nivel alcanzado: <span id="finalScore" style="color: #fff; font-weight: bold;">0</span></p>
         <p>Mejor nivel: <span id="finalBestScore" style="color: #ff00ff; font-weight: bold;">0</span></p>
         
-        <!-- Botón Reward Ad (Phase 3.2) -->
+        <!-- Botón Reward Ad -->
         <button id="reviveBtn" class="btn-revive">📺 VER VÍDEO PARA REVIVIR</button>
         
         <button id="shareBtn" class="btn-share">🚀 RETAR A UN AMIGO</button>
         <button id="restartBtn">REINTENTAR</button>
-    </div>
-
-    <!-- Pantalla falsa de anuncio para simular integración SDK -->
-    <div id="adSimulator">
-        <div class="ad-loader"></div>
-        <h2>Mostrando Anuncio Patrocinado...</h2>
-        <p id="adTimer">3</p>
     </div>
 
     <script>
@@ -321,14 +290,13 @@
         const gameOverScreen = document.getElementById('gameOverScreen');
         const tapToStartEl = document.getElementById('tapToStart');
         const hitFlash = document.getElementById('hitFlash');
-        const affiliateBanner = document.getElementById('affiliateBanner');
+        
+        // CORRECCIÓN VITAL AQUÍ: Vinculado al ID exacto del HTML
+        const affiliateBanner = document.getElementById('promo-link');
         
         const shareBtn = document.getElementById('shareBtn');
         const restartBtn = document.getElementById('restartBtn');
         const reviveBtn = document.getElementById('reviveBtn');
-        
-        const adSimulator = document.getElementById('adSimulator');
-        const adTimerEl = document.getElementById('adTimer');
         const toastEl = document.getElementById('toast');
 
         // Variables Globales
@@ -344,7 +312,7 @@
         let gameState = 'START';
         let animationId;
         let lastTime = 0;
-        let hasRevivedThisRound = false; // Solo se permite revivir 1 vez por partida
+        let hasRevivedThisRound = false;
 
         bestScoreDisplay.innerText = `MEJOR: ${bestScore}`;
 
@@ -367,7 +335,7 @@
             document.body.classList.remove('flash-red');
             document.body.classList.remove('shake');
             tapToStartEl.style.display = 'block';
-            affiliateBanner.style.display = 'block';
+            if(affiliateBanner) affiliateBanner.style.display = 'block';
             
             gameState = 'START';
         }
@@ -375,7 +343,7 @@
         function startGame() {
             gameState = 'PLAYING';
             tapToStartEl.style.display = 'none';
-            affiliateBanner.style.display = 'none'; // Ocultar anuncio para no distraer
+            if(affiliateBanner) affiliateBanner.style.display = 'none';
             lastTime = performance.now();
             animationId = requestAnimationFrame(gameLoop);
         }
@@ -438,7 +406,6 @@
             finalScoreEl.innerText = score;
             finalBestScoreEl.innerText = bestScore;
 
-            // Lógica Monetización: Mostrar botón revivir solo si el nivel es >= 8 y no ha revivido ya
             if (score >= 8 && !hasRevivedThisRound) {
                 reviveBtn.style.display = 'block';
             } else {
@@ -450,39 +417,26 @@
             }, 500);
         }
 
-        // --- SISTEMA DE MONETIZACIÓN: REWARD ADS ---
         function watchAdToRevive(e) {
             e.stopPropagation();
             gameOverScreen.classList.remove('active');
-            adSimulator.style.display = 'flex';
             
-            let timeLeft = 3;
-            adTimerEl.innerText = timeLeft;
-            
-            let adInterval = setInterval(() => {
-                timeLeft--;
-                adTimerEl.innerText = timeLeft;
-                if(timeLeft <= 0) {
-                    clearInterval(adInterval);
-                    finishAdAndRevive();
-                }
+            // Pausamos brevemente para dar tiempo al anuncio de Monetag a cubrir la pantalla
+            setTimeout(() => {
+                finishAdAndRevive();
             }, 1000);
         }
 
         function finishAdAndRevive() {
-            adSimulator.style.display = 'none';
-            hasRevivedThisRound = true; // Consumido
+            hasRevivedThisRound = true; 
             
-            // Rebobinar un poco el indicador para dar tiempo de reacción
             indicatorX = 5; 
             direction = 1;
             indicatorEl.style.left = indicatorX + '%';
             
-            // Quitar efectos de daño
             document.body.classList.remove('flash-red');
             document.body.classList.remove('shake');
             
-            // Mostrar texto flotante temporal y reanudar
             tapToStartEl.innerText = "¡REVIVIDO! TOCA PARA SEGUIR";
             tapToStartEl.style.display = 'block';
             gameState = 'START'; 
@@ -495,7 +449,6 @@
         }
 
         function fallbackCopy(text) {
-            // Método infalible para copiar en entornos restringidos
             const textArea = document.createElement("textarea");
             textArea.value = text;
             textArea.style.position = "fixed"; 
@@ -525,23 +478,20 @@
                         url: window.location.href
                     });
                 } catch (err) {
-                    // Si el usuario cancela o falla, copiamos al portapapeles
                     fallbackCopy(textToShare);
                 }
             } else {
-                // Si no hay soporte nativo (PC o Iframe), copiamos directo
                 fallbackCopy(textToShare);
             }
         }
 
         function handleInteraction(e) {
             if(e.type === 'touchstart') e.preventDefault();
-            // Evitar clic en banner afiliado
             if(e.target === affiliateBanner) return;
             
             if (gameState === 'START') {
                 startGame();
-                tapToStartEl.innerText = "TOCA PARA EMPEZAR"; // resetear texto por si venía de revivir
+                tapToStartEl.innerText = "TOCA PARA EMPEZAR";
             } else if (gameState === 'PLAYING') {
                 checkHit();
             }
