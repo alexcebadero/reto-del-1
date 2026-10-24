@@ -486,17 +486,20 @@
         }
 
         function handleInteraction(e) {
-            if(e.type === 'touchstart') e.preventDefault();
-            if(e.target === affiliateBanner) return;
-            
-            if (gameState === 'START') {
-                startGame();
-                tapToStartEl.innerText = "TOCA PARA EMPEZAR";
-            } else if (gameState === 'PLAYING') {
-                checkHit();
-            }
-        }
-
+    // Excepción: Permite el clic nativo si se toca el banner de afiliado
+    if (affiliateBanner && (e.target === affiliateBanner || affiliateBanner.contains(e.target))) {
+        return; 
+    }
+    
+    if(e.type === 'touchstart') e.preventDefault();
+    
+    if (gameState === 'START') {
+        startGame();
+        tapToStartEl.innerText = "TOCA PARA EMPEZAR";
+    } else if (gameState === 'PLAYING') {
+        checkHit();
+    }
+}
         document.addEventListener('mousedown', handleInteraction);
         document.addEventListener('touchstart', handleInteraction, {passive: false});
 
