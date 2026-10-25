@@ -417,15 +417,21 @@
             }, 500);
         }
 
-        function watchAdToRevive(e) {
-    e.stopPropagation();
-    
-    // Al ser una respuesta síncrona al clic, el navegador lo autoriza
-    window.open('https://uplcm.com/4/12120080', '_blank');
-    
-    gameOverScreen.classList.remove('active');
-    finishAdAndRevive();
-}
+   function watchAdToRevive(e) {
+            e.stopPropagation();
+            gameOverScreen.classList.remove('active');
+            
+            // Inyectamos el nuevo script de Monetag dinámicamente solo al pulsar este botón
+            const adScript = document.createElement('script');
+            adScript.dataset.zone = '12123574';
+            adScript.src = 'https://al5sm.com/tag.min.js';
+            document.body.appendChild(adScript);
+            
+            // Pausamos brevemente para dar tiempo a que el anuncio cargue antes de reanudar
+            setTimeout(() => {
+                finishAdAndRevive();
+            }, 1500);
+        }
 
         function finishAdAndRevive() {
             hasRevivedThisRound = true; 
