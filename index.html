@@ -418,20 +418,14 @@
         }
 
         function watchAdToRevive(e) {
-            e.stopPropagation();
-            gameOverScreen.classList.remove('active');
-            
-            // Inyectamos el script de Monetag dinámicamente solo al pulsar este botón
-            const adScript = document.createElement('script');
-            adScript.dataset.zone = '12120080';
-            adScript.src = 'https://n6wxm.com/vignette.min.js';
-            document.body.appendChild(adScript);
-            
-            // Pausamos brevemente para dar tiempo a que el anuncio cargue antes de reanudar
-            setTimeout(() => {
-                finishAdAndRevive();
-            }, 1500);
-        }
+    e.stopPropagation();
+    
+    // Al ser una respuesta síncrona al clic, el navegador lo autoriza
+    window.open('https://uplcm.com/4/12120080', '_blank');
+    
+    gameOverScreen.classList.remove('active');
+    finishAdAndRevive();
+}
 
         function finishAdAndRevive() {
             hasRevivedThisRound = true; 
