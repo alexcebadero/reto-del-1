@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
     <meta name="monetag" content="1e3e921d3433fd353ae7f2e9e8120f87">
-    <script>(function(s){s.dataset.zone='12116879',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Reto del 1%</title>
@@ -421,10 +420,16 @@
             e.stopPropagation();
             gameOverScreen.classList.remove('active');
             
-            // Pausamos brevemente para dar tiempo al anuncio de Monetag a cubrir la pantalla
+            // Inyectamos el script de Monetag dinámicamente solo al pulsar este botón
+            const adScript = document.createElement('script');
+            adScript.dataset.zone = '12116879';
+            adScript.src = 'https://n6wxm.com/vignette.min.js';
+            document.body.appendChild(adScript);
+            
+            // Pausamos brevemente para dar tiempo a que el anuncio cargue antes de reanudar
             setTimeout(() => {
                 finishAdAndRevive();
-            }, 1000);
+            }, 1500);
         }
 
         function finishAdAndRevive() {
