@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
     <meta name="monetag" content="1e3e921d3433fd353ae7f2e9e8120f87">
-    <script>(function(s){s.dataset.zone='12116879',s.src='https://n6wxm.com/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Reto del 1%</title>
@@ -492,20 +491,21 @@
         }
 
         function handleInteraction(e) {
-    // Excepción: Permite el clic nativo si se toca el banner de afiliado
-    if (affiliateBanner && (e.target === affiliateBanner || affiliateBanner.contains(e.target))) {
-        return; 
-    }
-    
-    if(e.type === 'touchstart') e.preventDefault();
-    
-    if (gameState === 'START') {
-        startGame();
-        tapToStartEl.innerText = "TOCA PARA EMPEZAR";
-    } else if (gameState === 'PLAYING') {
-        checkHit();
-    }
-}
+            // Excepción: Permite el clic nativo si se toca el banner de afiliado
+            if (affiliateBanner && (e.target === affiliateBanner || affiliateBanner.contains(e.target))) {
+                return; 
+            }
+            
+            if(e.type === 'touchstart') e.preventDefault();
+            
+            if (gameState === 'START') {
+                startGame();
+                tapToStartEl.innerText = "TOCA PARA EMPEZAR";
+            } else if (gameState === 'PLAYING') {
+                checkHit();
+            }
+        }
+
         document.addEventListener('mousedown', handleInteraction);
         document.addEventListener('touchstart', handleInteraction, {passive: false});
 
