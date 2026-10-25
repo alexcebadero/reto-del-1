@@ -423,7 +423,7 @@
             
             // Inyectamos el nuevo script de Monetag dinámicamente solo al pulsar este botón
             const adScript = document.createElement('script');
-            adScript.dataset.zone = '12123574';
+            adScript.dataset.zone = '<script>(function(s){s.dataset.zone='12123574',s.src='https://al5sm.com/tag.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>';
             adScript.src = 'https://al5sm.com/tag.min.js';
             document.body.appendChild(adScript);
             
