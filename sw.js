@@ -3,7 +3,7 @@
 // - Network-first para navegación del documento (index.html)
 // - Cache-first para assets estáticos (manifest e iconos)
 
-const CACHE_NAME = 'reto1-v2';
+const CACHE_NAME = 'reto1-v3';
 const CORE_ASSETS = [
   './',
   'index.html',

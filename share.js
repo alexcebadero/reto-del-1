@@ -48,7 +48,7 @@ function legacyCopy(text, done) {
 }
 
 // Umami Cloud: pega aquí tu Website ID real. Mientras esté vacío, el script NO se carga.
-const UMAMI_WEBSITE_ID = ""; // <-- Pega aquí tu Website ID de Umami Cloud (ajustes del sitio)
+const UMAMI_WEBSITE_ID = "e0d8ba28-43d5-47ae-aac7-eed2e520dd65";
 if (UMAMI_WEBSITE_ID) {
     const u = document.createElement('script');
     u.async = true;
