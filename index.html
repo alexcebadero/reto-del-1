@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>El Reto del 1%</title>
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="PON_AQUI_TU_WEBSITE_ID_UMAMI"></script>
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -250,6 +251,38 @@
         .toast-show {
             opacity: 1 !important;
         }
+
+        /* Game Over: resultado, botones de compartir, banner de retado */
+        .overlay h1 { font-size: 2rem; margin: 0 0 4px; }
+        .go-level {
+            font-size: 1.3rem; letter-spacing: 3px; color: #39ff14; font-weight: bold;
+            text-align: center; line-height: 1; margin-top: 4px;
+        }
+        .go-level span {
+            display: block; font-size: 6.5rem; line-height: 1.05;
+            text-shadow: 0 0 20px #39ff14, 0 0 40px #39ff14;
+        }
+        .go-sub { font-size: 1.2rem !important; color: #fff; margin: 4px 0 !important; text-align: center; }
+        .go-best { font-size: 0.95rem !important; color: #888; margin: 2px 0 6px !important; }
+        #retoWin { display: none; text-align: center; color: #39ff14; font-weight: bold; margin-top: 6px; width: 85%; max-width: 300px; }
+        #retoWin p { font-size: 1.05rem; margin: 0; }
+        #retoReturnBtn { margin-top: 8px; padding: 12px 24px; background: #39ff14; color: #000; }
+        .btn-primary-neon {
+            background: #39ff14; color: #000; font-size: 1.3rem; padding: 18px 30px;
+            box-shadow: 0 0 20px rgba(57,255,20,0.7);
+        }
+        .btn-outline {
+            background: transparent; color: #39ff14; border: 2px solid #39ff14;
+            font-size: 0.95rem; padding: 10px 24px; margin-top: 10px;
+        }
+        #retoBanner {
+            position: absolute; top: 0; left: 0; right: 0; z-index: 20;
+            background: #000; border-bottom: 2px solid #39ff14;
+            box-shadow: 0 0 25px rgba(57,255,20,0.5);
+            padding: 14px 10px 18px; display: flex; flex-direction: column; align-items: center;
+        }
+        #retoBanner .reto-msg { color: #39ff14; font-weight: bold; font-size: 1.2rem; text-align: center; }
+        #retoPlayBtn { background: #39ff14; color: #000; font-size: 1.6rem; padding: 16px 30px; margin-top: 12px; }
     </style>
 </head>
 <body>
@@ -278,13 +311,16 @@
 
     <div id="gameOverScreen" class="overlay">
         <h1>GAME OVER</h1>
-        <p>Nivel alcanzado: <span id="finalScore" style="color: #fff; font-weight: bold;">0</span></p>
-        <p>Mejor nivel: <span id="finalBestScore" style="color: #ff00ff; font-weight: bold;">0</span></p>
+        <div class="go-level">NIVEL <span id="finalScore">0</span></div>
+        <p class="go-sub">Fallaste por un píxel</p>
+        <p class="go-best">Mejor nivel: <span id="finalBestScore" style="color: #ff00ff; font-weight: bold;">0</span></p>
+        <div id="retoWin"><p>Has pasado a quien te retó.</p><button id="retoReturnBtn">Devolver el reto</button></div>
         
         <!-- Botón Reward Ad -->
         <button id="reviveBtn" class="btn-revive">📺 VER ANUNCIO PARA REVIVIR</button>
         
-        <button id="shareBtn" class="btn-share">🚀 RETAR A UN AMIGO</button>
+        <button id="shareBtn" class="btn-primary-neon">Retar a un amigo</button>
+        <button id="cardBtn" class="btn-outline">Presumir de nivel</button>
         <button id="restartBtn">REINTENTAR</button>
     </div>
 
@@ -353,6 +389,7 @@
             gameState = 'PLAYING';
             tapToStartEl.style.display = 'none';
             if(affiliateBanner) affiliateBanner.style.display = 'none';
+            if (typeof retoOnStart === 'function') retoOnStart();
             lastTime = performance.now();
             animationId = requestAnimationFrame(gameLoop);
         }
@@ -414,6 +451,7 @@
             
             finalScoreEl.innerText = score;
             finalBestScoreEl.innerText = bestScore;
+            if (typeof retoOnGameOver === 'function') retoOnGameOver(score);
 
             if (score >= 8 && !hasRevivedThisRound) {
                 reviveBtn.style.display = 'block';
@@ -457,43 +495,6 @@
             setTimeout(() => toastEl.classList.remove('toast-show'), 3000);
         }
 
-        function fallbackCopy(text) {
-            const textArea = document.createElement("textarea");
-            textArea.value = text;
-            textArea.style.position = "fixed"; 
-            document.body.appendChild(textArea);
-            textArea.focus();
-            textArea.select();
-
-            try {
-                document.execCommand('copy');
-                showToast('¡Reto copiado! Pégalo en WhatsApp');
-            } catch (err) {
-                console.error('Error al copiar', err);
-            }
-            document.body.removeChild(textArea);
-        }
-
-        async function shareGame(e) {
-            if(e) { e.preventDefault(); e.stopPropagation(); }
-            
-            const textToShare = `He aguantado hasta el nivel ${score} en El Reto del 1% antes de estamparme. Apuesto a que no puedes superarme. Juega aquí: ${window.location.href}`;
-            
-            if (navigator.share) {
-                try {
-                    await navigator.share({
-                        title: 'El Reto del 1%',
-                        text: `He aguantado hasta el nivel ${score} en El Reto del 1% antes de estamparme. Apuesto a que no puedes superarme.`,
-                        url: window.location.href
-                    });
-                } catch (err) {
-                    fallbackCopy(textToShare);
-                }
-            } else {
-                fallbackCopy(textToShare);
-            }
-        }
-
         function handleInteraction(e) {
             // Excepción: Permite el clic nativo si se toca el banner de afiliado
             if (affiliateBanner && (e.target === affiliateBanner || affiliateBanner.contains(e.target))) {
@@ -513,10 +514,6 @@
         document.addEventListener('mousedown', handleInteraction);
         document.addEventListener('touchstart', handleInteraction, {passive: false});
 
-        shareBtn.addEventListener('mousedown', (e) => e.stopPropagation());
-        shareBtn.addEventListener('touchstart', (e) => e.stopPropagation());
-        shareBtn.addEventListener('click', shareGame);
-
         restartBtn.addEventListener('mousedown', (e) => e.stopPropagation());
         restartBtn.addEventListener('touchstart', (e) => e.stopPropagation());
         restartBtn.addEventListener('click', resetGame);
@@ -526,6 +523,7 @@
         reviveBtn.addEventListener('click', watchAdToRevive);
 
     </script>
+    <script src="share.js"></script>
     <script>
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', async () => {

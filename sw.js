@@ -3,10 +3,11 @@
 // - Network-first para navegación del documento (index.html)
 // - Cache-first para assets estáticos (manifest e iconos)
 
-const CACHE_NAME = 'reto1-v1';
+const CACHE_NAME = 'reto1-v2';
 const CORE_ASSETS = [
   './',
   'index.html',
+  'share.js',
   'manifest.json',
   'icon-192.png',
   'icon-512.png',
@@ -61,7 +62,7 @@ self.addEventListener('fetch', (event) => {
   }
 
   // Assets estáticos de la capa PWA: primero caché, luego red
-  const staticAssets = ['manifest.json', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
+  const staticAssets = ['share.js', 'manifest.json', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png'];
   if (staticAssets.some((asset) => url.pathname.endsWith(asset))) {
     event.respondWith(
       caches.match(request).then((cached) => {
