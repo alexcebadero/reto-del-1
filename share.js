@@ -47,6 +47,16 @@ function legacyCopy(text, done) {
     document.body.removeChild(ta);
 }
 
+// Umami Cloud: pega aquí tu Website ID real. Mientras esté vacío, el script NO se carga.
+const UMAMI_WEBSITE_ID = ""; // <-- Pega aquí tu Website ID de Umami Cloud (ajustes del sitio)
+if (UMAMI_WEBSITE_ID) {
+    const u = document.createElement('script');
+    u.async = true;
+    u.src = 'https://cloud.umami.is/script.js';
+    u.setAttribute('data-website-id', UMAMI_WEBSITE_ID);
+    document.head.appendChild(u);
+}
+
 // Evento Umami con solo dos propiedades: nivel y reto ('sí'/'no').
 function track(name, nivel) {
     window.umami?.track(name, { nivel, reto: getRetoFromURL() !== null ? 'sí' : 'no' });
@@ -83,9 +93,17 @@ async function makeCard(level) {
     try { await document.fonts.load(font(100)); } catch (_) {}
     g.fillStyle = '#39ff14';
     g.shadowColor = '#39ff14';
-    g.shadowBlur = 60;
-    g.font = font(String(level).length > 2 ? 240 : 300);
-    g.fillText('NIVEL ' + level, 540, 800);
+    // Ajusta el tamaño al ancho: lo más grande posible (máx. 300px) sin pasar de 920px.
+    const MAX_W = 920;
+    const title = 'NIVEL ' + level;
+    let px = 300;
+    g.font = font(px);
+    const w0 = g.measureText(title).width;
+    if (w0 > MAX_W) px = Math.floor(px * MAX_W / w0);
+    g.font = font(px);
+    while (px > 20 && g.measureText(title).width > MAX_W) { px--; g.font = font(px); }
+    g.shadowBlur = Math.round(60 * px / 300);
+    g.fillText(title, 540, 800);
     g.shadowBlur = 30;
     g.font = font(90);
     g.fillText('Por un píxel', 540, 1050);
